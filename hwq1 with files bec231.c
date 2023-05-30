@@ -1,49 +1,46 @@
-#include<stdio.h>
-#include<stdlib.h>
-void compare(char str[10][100]);
-int count(char str[]);
+#include <stdio.h>
+#include <stdlib.h>
 
-int main()
-{
- FILE *s,*c;
- char str[10][100];
- s=fopen("test.txt","r");
- for(int i=0;i<10;i++)
- {
-     fgets(str[i],264,s);
- }
- compare(str);
- c=fopen("test1.txt","w");
- for(int i=0;i<10;i++)
- {
-     fputs(str[i],c);
- }
+void find_longest(char lines[][1000], int n);
+int length(char lines[]);
 
- fclose(s);
- fclose(c);
- return 0;
+int main() {
+    FILE *fp;
+    int n;
+    fp = fopen("input.txt","r");
+    if (fp == NULL) {
+        printf("go to inputfile.");
+        exit(1);
+    }
+    fscanf(fp, "%d", &n);  // read number of strings
+    char lines[n][1000];  // [n][size]  (2D array)
+    for (int i = 0; i < n; i++) {
+        fscanf(fp,"%s",lines[i]);  // read each string
+    }
+    fclose(fp);
+
+    find_longest(lines,n);
+    return 0;
 }
-int count(char str[])
-{
-    int i,countt=0;
-    while(str[i]!='\0')
-    {
-        countt++;
+
+int length(char lines[]) {
+    int i=0, c=0;
+    while (lines[i]!= '\0') {
+        c++;
         i++;
     }
-    return countt;
+    return c;
 }
-void compare(char str[10][100])
-{
-    int c=0,m,k,i;
-    //char a[100];
-    for(i=0;i<10;i++)
-    {
-       if(m=count(str[i])>c)
-        {
-            c=count(str[i]);
-           k=i;
+
+void find_longest(char lines[][1000], int n) {
+    int i, j = 0;
+    int min=length(lines[0]);  // compare with first string itself
+    for (i = 0; i < n; i++) {
+        int hold=length(lines[i]);
+        if (hold > min) {
+            min=hold;
+            j=i;
         }
     }
-   printf("\n longest is \n %s\n",str[k]);
+    printf("%s \n", lines[j]);
 }
